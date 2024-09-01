@@ -1,20 +1,41 @@
+import react,{useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createTables } from './database/db.js';
+
+import Index from './components/UI/Index.js';
+import Add from './components/UI/Add.js';
+import Edit from './components/UI/Edit.js';
+
+const Stack = createStackNavigator();
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  useEffect(() => {
+    createTables(); 
+  }, []);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Index">
+        <Stack.Screen
+          name="Index"
+          component={Index}
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen
+          name="Add"
+          component={Add}
+          options={{ title: 'Add Task' }}
+        />
+        <Stack.Screen
+          name="Edit"
+          component={Edit}
+          options={{ title: 'Edit Task' }}
+        />
+      </Stack.Navigator>
+      <StatusBar style="auto" />
+    </NavigationContainer>
+  );
+};
